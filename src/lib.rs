@@ -101,6 +101,7 @@ impl Snake {
 
     pub fn render(&mut self, gl: &mut GlGraphics, args: &RenderArgs) {
         const COLOR: [f32; 4] = [1.0, 0.890625, 0.5546875, 1.0];
+        let mut color = COLOR;
 
         gl.draw(args.viewport(), |c, gl| {
             let transform = c.transform;
@@ -108,7 +109,8 @@ impl Snake {
             for (x_pos, y_pos) in &self.body {
                 let square =
                     graphics::rectangle::square((x_pos * 20) as f64, (y_pos * 20) as f64, 20_f64);
-                graphics::rectangle(COLOR, square, transform, gl)
+                graphics::rectangle(color, square, transform, gl);
+                color = change_hue(color, 6_f32, 255_f32, 143_f32);
             }
         })
     }
@@ -220,4 +222,43 @@ enum Direction {
     Down,
     Left,
     Right,
+}
+
+fn change_hue(mut rgb: [f32; 4], change: f32, max: f32, min: f32) -> [f32; 4] {
+    let check = &mut rgb[0..3];
+
+    for c in check {
+        *c *= 255_f32;
+    }
+
+    if rgb[0] >= max {
+        if rgb[2] >= min {
+            rgb[2] -= change;
+        } else {
+            rgb[1] += change;
+        }
+    }
+
+    if rgb[1] >= max {
+        if rgb[0] >= min {
+            rgb[0] -= change;
+        } else {
+            rgb[2] += change;
+        }
+    }
+
+    if rgb[2] >= max {
+        if rgb[1] >= min {
+            rgb[1] -= change;
+        } else {
+            rgb[0] += change;
+        }
+    }
+
+    let check = &mut rgb[0..3];
+
+    for c in check {
+        *c /= 255_f32;
+    }
+    rgb
 }
