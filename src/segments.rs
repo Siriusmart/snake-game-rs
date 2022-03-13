@@ -5,7 +5,7 @@ pub fn render(segments: Vec<[f64; 4]>, gl: &mut GlGraphics, args: &RenderArgs, c
     gl.draw(args.viewport(), |c, gl| {
         let transform = c.transform;
 
-        for square in  segments{
+        for square in segments {
             graphics::rectangle(color, square, transform, gl);
         }
     });
@@ -13,6 +13,7 @@ pub fn render(segments: Vec<[f64; 4]>, gl: &mut GlGraphics, args: &RenderArgs, c
 
 pub fn from_num(num: usize, size: i32, mut offset: (i32, i32)) -> Vec<[f64; 4]> {
     let num = num.to_string();
+    offset.0 += (num.len() as i32 - 1) * 5 * size;
     let mut out = Vec::new();
 
     for c in num.chars().rev() {
