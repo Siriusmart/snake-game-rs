@@ -2,5 +2,5 @@
 
 A Basic snake game with a score display and looks really clean
 
-> ## Showcase
-> https://user-images.githubusercontent.com/71584876/158062009-97bf1ece-fc08-4eda-a30f-94818269dd8f.mp4
+> ## Showcase Video
+> [![Video](https://i9.ytimg.com/vi/_YpXT9lZCA8/mq2.jpg?sqp=CITmt5EG&rs=AOn4CLDLNSzZX3zWurfZhMiNGulTVS_mqA)](https://www.youtube.com/embed/_YpXT9lZCA8)
