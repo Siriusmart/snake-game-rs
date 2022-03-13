@@ -3,6 +3,8 @@ use piston::input::*;
 use rand::Rng;
 use std::collections::LinkedList;
 
+mod segments;
+
 pub struct Game {
     gl: GlGraphics,
     snake: Snake,
@@ -14,7 +16,7 @@ pub struct Game {
 
 impl Game {
     pub fn score(&self) -> usize {
-        self.snake.body.len()
+        self.snake.body.len() - 1
     }
 
     pub fn new(gl: GlGraphics, snake: Snake, width: i32, height: i32) -> Self {
@@ -30,17 +32,14 @@ impl Game {
 
     pub fn render(&mut self, args: &RenderArgs) -> bool {
         const BACKGROUND: [f32; 4] = [0.13671875, 0.15234375, 0.1640625, 1.0];
-        const DEAD: [f32; 4] = [0.59765625, 0.0, 0.0, 1.0];
 
-        if self.dead {
-            self.gl.draw(args.viewport(), |_c, gl| {
-                graphics::clear(DEAD, gl);
-            });
-        } else {
-            self.gl.draw(args.viewport(), |_c, gl| {
-                graphics::clear(BACKGROUND, gl);
-            });
-        }
+        self.gl.draw(args.viewport(), |_c, gl| {
+            graphics::clear(BACKGROUND, gl);
+        });
+
+        const SCORE_COLOR: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+        let display = segments::from_num(self.score(), 5, (300, 300));
+        segments::render(display, &mut self.gl, &args, SCORE_COLOR);
 
         if let Some(fruit) = self.fruit {
             fruit.render(&mut self.gl, &args);
@@ -100,7 +99,7 @@ impl Snake {
     }
 
     pub fn render(&mut self, gl: &mut GlGraphics, args: &RenderArgs) {
-        const COLOR: [f32; 4] = [1.0, 0.890625, 0.5546875, 1.0];
+        const COLOR: [f32; 4] = [1.0, 0.890625, 0.5546875, 0.7];
         let mut color = COLOR;
 
         gl.draw(args.viewport(), |c, gl| {
@@ -110,7 +109,7 @@ impl Snake {
                 let square =
                     graphics::rectangle::square((x_pos * 20) as f64, (y_pos * 20) as f64, 20_f64);
                 graphics::rectangle(color, square, transform, gl);
-                color = change_hue(color, 6_f32, 255_f32, 143_f32);
+                color = change_hue(color, 6_f32, 255_f32, 204_f32);
             }
         })
     }
@@ -124,13 +123,13 @@ impl Snake {
         }
 
         if self.x_pos < 0 {
-            self.x_pos = max_width;
+            self.x_pos = max_width - 1;
         } else if self.x_pos > max_width - 1 {
             self.x_pos = 0
         }
 
         if self.y_pos < 0 {
-            self.y_pos = max_height;
+            self.y_pos = max_height - 1;
         } else if self.y_pos > max_height - 1 {
             self.y_pos = 0
         }
@@ -200,15 +199,15 @@ impl Fruit {
     }
 
     fn render(&self, gl: &mut GlGraphics, args: &RenderArgs) {
-        const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+        const RED: [f32; 4] = [1.0, 0.0, 0.6796875, 0.7];
 
         gl.draw(args.viewport(), |c, gl| {
             let transform = c.transform;
 
             let square = graphics::rectangle::square(
-                (self.x_pos * 20) as f64,
-                (self.y_pos * 20) as f64,
-                20_f64,
+                (self.x_pos * 20) as f64 + 2.5,
+                (self.y_pos * 20) as f64 + 2.5,
+                15_f64,
             );
 
             graphics::rectangle(RED, square, transform, gl)
