@@ -42,19 +42,19 @@ fn main() {
         while let Some(e) = events.next(&mut window) {
             if let Some(k) = e.button_args() {
                 match k.button {
-                    Button::Keyboard(Key::Up) if up.elapsed().as_millis() > KEY_COOLDOWN => {
+                    Button::Keyboard(Key::Up) | Button::Keyboard(Key::K) if up.elapsed().as_millis() > KEY_COOLDOWN => {
                         up = Instant::now();
                         last_pressed.push_back(k.button);
                     }
-                    Button::Keyboard(Key::Down) if down.elapsed().as_millis() > KEY_COOLDOWN => {
+                    Button::Keyboard(Key::Down) | Button::Keyboard(Key::J) if down.elapsed().as_millis() > KEY_COOLDOWN => {
                         down = Instant::now();
                         last_pressed.push_back(k.button);
                     }
-                    Button::Keyboard(Key::Left) if left.elapsed().as_millis() > KEY_COOLDOWN => {
+                    Button::Keyboard(Key::Left) | Button::Keyboard(Key::H) if left.elapsed().as_millis() > KEY_COOLDOWN => {
                         left = Instant::now();
                         last_pressed.push_back(k.button);
                     }
-                    Button::Keyboard(Key::Right) if right.elapsed().as_millis() > KEY_COOLDOWN => {
+                    Button::Keyboard(Key::Right) | Button::Keyboard(Key::L) if right.elapsed().as_millis() > KEY_COOLDOWN => {
                         right = Instant::now();
                         last_pressed.push_back(k.button);
                     }

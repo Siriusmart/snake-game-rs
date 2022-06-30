@@ -155,10 +155,10 @@ impl Snake {
     fn pressed(&mut self, button: Button) {
         let before = self.direction.clone();
         self.direction = match button {
-            Button::Keyboard(Key::Up) if self.direction != Direction::Down => Direction::Up,
-            Button::Keyboard(Key::Down) if self.direction != Direction::Up => Direction::Down,
-            Button::Keyboard(Key::Left) if self.direction != Direction::Right => Direction::Left,
-            Button::Keyboard(Key::Right) if self.direction != Direction::Left => Direction::Right,
+            Button::Keyboard(Key::Up) | Button::Keyboard(Key::K) if self.direction != Direction::Down => Direction::Up,
+            Button::Keyboard(Key::Down) | Button::Keyboard(Key::J) if self.direction != Direction::Up => Direction::Down,
+            Button::Keyboard(Key::Left) | Button::Keyboard(Key::H) if self.direction != Direction::Right => Direction::Left,
+            Button::Keyboard(Key::Right) | Button::Keyboard(Key::L)if self.direction != Direction::Left => Direction::Right,
             _ => self.direction,
         };
 
